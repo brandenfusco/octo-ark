@@ -1,30 +1,43 @@
 var webdriverio = require('webdriverio');
 var options = {
     desiredCapabilities: {
-        browserName: 'firefox',
+        browserName: 'firefox'
+      },
+        waitforTimeout: 120 * 1000,
         host: '172.16.0.6',
-        port: 32780
-    }
+        port: 4444,
 };
+
+var browser = webdriverio.remote(options);
 
 
 module.exports = function () {
-  this.Given(/^I am on the Cucumber.js GitHub repository$/, function() {
-    webdriverio
-        .remote(options)
-        .init()
-        .url('http://www.google.com')
-        .getTitle().then(function(title) {
-            console.log('Title was: ' + title);
-        })
-        .end();
+  this.Given(/^I am on google\.com$/, function (done) {
+    browser
+        //.remote(options)
+        .url('http://www.google.com/')
+        .call(done);
   });
 
-  this.When(/^I click on "([^"]*)"$/, function (text) {
-    return true;
+  this.When(/^I search for "([^"]*)"$/, function (searchTerm, done) {
+    browser
+      .setValue('input[id="lst-ib"]', searchTerm)
+      .keys(['Enter'])
+      .call(done);
   });
 
-  this.Then(/^I should see "([^"]*)"$/, function (text) {
-    return true;
+  this.Then(/^I should see "([^"]*)"$/, function (link, done) {
+    browser
+      .waitForExist('#rso > div:nth-child(1) > div:nth-child(1) > div > h3 > a',link)
+      .call(done);
+
+  });
+
+  this.Before(function (scenario, done) {
+    browser.init().call(done);
+  });
+
+  this.After(function (scenario, done) {
+    browser.end().call(done);
   });
 };

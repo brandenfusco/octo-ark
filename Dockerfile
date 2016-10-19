@@ -8,7 +8,6 @@ RUN apt-get update && apt-get install -y \
   libxss1 \
   libxtst6 \
   curl \
-  xvfb \
   && rm -rf /var/lib/apt/lists/*
 
 RUN curl -sL https://deb.nodesource.com/setup_5.x | bash -
