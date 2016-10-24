@@ -22,7 +22,7 @@ module.exports = function () {
   this.When(/^I search for "([^"]*)"$/, function (searchTerm, done) {
     browser
       .setValue('input[id="lst-ib"]', searchTerm)
-      .keys(['Enter'])
+      .click('//*[@id="sblsbb"]/button')
       .call(done);
   });
 
